@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบเขียนหนังสือราชการ อบต.บก</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📄 ระบบเขียนหนังสือราชการ อบต.บก</h1>
+      <p class="note">ตามระเบียบสารบรรณ พ.ศ. ๒๕๔๗ | อ่านง่าย — พิมพ์เร็ว — ประหยัดเวลา</p>
+    </header>
+
+    <section class="card">
+      <h2>⚙️ ข้อมูลพื้นฐาน</h2>
+      <div class="form-row">
+        <label>ชื่อหน่วยงาน</label>
+        <input type="text" id="orgName" value="องค์การบริหารส่วนตำบลบก">
+      </div>
+      <div class="form-row">
+        <label>ที่อยู่</label>
+        <input type="text" id="orgAddress" value="ตำบลบก อำเภอโนนคูณ จังหวัดศรีสะเกษ ๓๓๑๒๐">
+      </div>
+      <div class="form-row">
+        <label>ชื่อผู้ลงนาม</label>
+        <input type="text" id="signerName" value="นายไพจิตร สมหวัง">
+      </div>
+      <div class="form-row">
+        <label>ตำแหน่ง</label>
+        <input type="text" id="signerPos" value="นายกองค์การบริหารส่วนตำบลบก">
+      </div>
+      <div class="form-row">
+        <label>🔑 Gemini API Key <small>(รับฟรีที่ aistudio.google.com)</small></label>
+        <input type="password" id="geminiKey" placeholder="ใส่คีย์ตรงนี้">
+      </div>
+      <button class="btn primary" onclick="saveSettings()">บันทึก</button>
+    </section>
+
+    <section class="card">
+      <h2>✍️ เขียนหนังสือ</h2>
+      <div class="form-row">
+        <label>ประเภท</label>
+        <select id="docType" onchange="updatePreview()">
+          <option value="external" selected>หนังสือภายนอก</option>
+          <option value="internal">หนังสือภายใน</option>
+          <option value="order">คำสั่ง</option>
+          <option value="announce">ประกาศ</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>เรื่อง</label>
+        <input type="text" id="docSubject" oninput="updatePreview()">
+      </div>
+      <div class="form-row">
+        <label>เรียน</label>
+        <input type="text" id="docTo" oninput="updatePreview()">
+      </div>
+      <div class="form-row">
+        <label>อ้างถึง</label>
+        <input type="text" id="docRef" oninput="updatePreview()">
+      </div>
+      <div class="form-row">
+        <label>สิ่งที่ส่งมาด้วย</label>
+        <input type="text" id="docAttach" oninput="updatePreview()">
+      </div>
+      <div class="form-row">
+        <label>เนื้อความ</label>
+        <textarea id="docBody" rows="8" placeholder="  พิมพ์ตรงนี้ ย่อหน้าเว้น ๒ ช่อง..." oninput="updatePreview()"></textarea>
+      </div>
+
+      <div style="background:#eef2ff; padding:15px; border-radius:8px; margin:15px 0;">
+        <h3>🤖 ช่วยเขียนเร็วขึ้น</h3>
+        <div class="form-row">
+          <label>อัปโหลดภาพหนังสือต้นเรื่อง</label>
+          <input type="file" id="imgUpload" accept="image/*" onchange="previewImg()">
+        </div>
+        <button class="btn primary" onclick="analyzeWithGemini()">📖 อ่านจากภาพ & ร่าง</button>
+        <button class="btn success" onclick="rewriteByGemini()">✨ ปรับสำนวนให้ถูกระเบียบ</button>
+      </div>
+
+      <h3>📋 ตัวอย่าง</h3>
+      <div class="preview-box" id="previewArea"></div>
+
+      <button class="btn success" onclick="saveDoc()">💾 บันทึก</button>
+      <button class="btn secondary" onclick="window.print()">🖨️ พิมพ์</button>
+      <button class="btn secondary" onclick="exportFile()">📥 สำรอง</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+      <button class="btn info" onclick="document.getElementById('importFile').click()">📂 นำเข้า</button>
+    </section>
+
+    <section class="card">
+      <h2>📑 ทะเบียน <span id="total">0</span> ฉบับ</h2>
+      <div id="docList"></div>
+    </section>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>
