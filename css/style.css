@@ -2,60 +2,234 @@
   font-family: 'TH SarabunPSK';
   src: local('TH SarabunPSK'), local('Sarabun');
   font-weight: normal;
+  font-style: normal;
 }
-*{margin:0; padding:0; box-sizing:border-box}
-:root{
-  --g-ext:1cm; --g-int:1.5cm;
-  --mt:2.5cm; --ml:3cm; --mr:2cm; --mb:2cm;
-  --pri:#0b3d91; --suc:#2e7d32; --war:#f57c00;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-body{
-  font-family:'TH SarabunPSK','Sarabun',sans-serif;
-  background:#f0f4f9; color:#1a1a1a; font-size:18px; line-height:1.8;
-  padding:20px 15px; min-height:100vh;
+
+:root {
+  --paper-width: 210mm;
+  --paper-height: 297mm;
+  --margin-top: 25mm;
+  --margin-bottom: 20mm;
+  --margin-left: 30mm;
+  --margin-right: 20mm;
+  --garuda-height: 10mm; /* หนังสือภายนอก สูง 1 ซม. ตามระเบียบ */
+  --garuda-height-int: 15mm; /* หนังสือภายใน สูง 1.5 ซม. */
+  --line-height: 1.8;
+  --text-size: 16pt; /* ขนาดตัวอักษรมาตรฐาน */
 }
-.container{max-width:850px; margin:0 auto}
-header{text-align:center; padding:25px; background:#fff; border-radius:12px; margin-bottom:25px; box-shadow:0 3px 12px rgba(0,0,0,.06)}
-h1{font-size:24px; color:var(--pri); margin-bottom:5px}
-.note{color:#2e7d32; font-size:16px}
-.card{background:#fff; padding:25px; margin-bottom:20px; border-radius:12px; box-shadow:0 3px 12px rgba(0,0,0,.06)}
-h2{font-size:20px; color:var(--pri); margin-bottom:18px; padding-bottom:8px; border-bottom:2px solid #e8edf5}
-h3{font-size:18px; margin:15px 0 10px; color:#333}
-.form-row{margin-bottom:14px}
-label{display:block; margin-bottom:5px; font-weight:bold; color:#2c3e50}
-input,select,textarea{
-  width:100%; padding:10px 14px; border:1px solid #d1d9e6;
-  border-radius:6px; font-size:18px; font-family:inherit;
+
+body {
+  font-family: 'TH SarabunPSK', 'Sarabun', 'Tahoma', sans-serif;
+  background: #f0f4f9;
+  color: #000000;
+  font-size: 18px;
+  line-height: var(--line-height);
+  padding: 20px 15px;
 }
-input:focus,select:focus,textarea:focus{outline:none; border-color:var(--pri); box-shadow:0 0 0 3px rgba(11,61,145,.1)}
-textarea{min-height:150px; resize:vertical}
-.btn{
-  font-family:inherit; font-size:18px; padding:10px 20px; margin:5px 8px 5px 0;
-  border:none; border-radius:6px; cursor:pointer; font-weight:bold; transition:.2s
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
 }
-.btn:hover{transform:translateY(-1px)}
-.btn.primary{background:var(--pri); color:#fff}
-.btn.success{background:var(--suc); color:#fff}
-.btn.secondary{background:#666; color:#fff}
-.btn.info{background:#00838f; color:#fff}
-.btn:disabled{opacity:.5; cursor:not-allowed; transform:none}
-.preview-box{
-  border:1px solid #ccd6e0; padding:var(--mt) var(--mr) var(--mb) var(--ml);
-  margin:15px 0; background:#fff; min-height:900px; position:relative;
-  white-space:pre-wrap; line-height:1.8; font-size:18px; border-radius:4px
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
 }
-.preview-box .garuda{position:absolute; top:var(--mt); left:var(--ml)}
-.preview-box .garuda img{height:var(--g-ext); width:auto}
-.preview-box.internal .garuda img{height:var(--g-int)}
-.preview-box .org-header{text-align:center; font-weight:bold; margin-bottom:1em; font-size:19px}
-.preview-box .doc-no{margin-bottom:.5em}
-.preview-box .doc-date{text-align:right; margin-bottom:1.5em}
-.preview-box .signature-block{margin-top:3em; text-align:right}
-.preview-box .signature-name{display:inline-block; text-align:center; width:280px}
-#docList>div{padding:12px 0; border-bottom:1px solid #edf2f7}
-#aiResult{margin-top:15px; padding:15px; background:#f0fdf4; border-radius:8px; border-left:4px solid var(--suc)}
-@media print{
-  body{background:#fff; padding:0}
-  header,.card:nth-child(n+3){display:none}
-  .preview-box{border:none; margin:0; padding:var(--mt) var(--mr) var(--mb) var(--ml)}
+
+header h1 {
+  font-size: 24px;
+  color: #0b3d91;
+  margin-bottom: 8px;
+}
+
+.note {
+  color: #2e7d32;
+  font-size: 16px;
+}
+
+.card {
+  background: #ffffff;
+  padding: 25px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+h2 {
+  font-size: 20px;
+  color: #0b3d91;
+  margin-bottom: 18px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e8edf5;
+}
+
+h3 {
+  font-size: 18px;
+  margin: 15px 0 10px;
+  color: #333;
+}
+
+.form-row {
+  margin-bottom: 14px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d9e6;
+  border-radius: 6px;
+  font-size: 18px;
+  font-family: inherit;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #0b3d91;
+  box-shadow: 0 0 0 3px rgba(11,61,145,0.1);
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.btn {
+  font-family: inherit;
+  font-size: 18px;
+  padding: 10px 20px;
+  margin: 5px 8px 5px 0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn.primary { background: #0b3d91; color: #fff; }
+.btn.success { background: #2e7d32; color: #fff; }
+.btn.secondary { background: #666; color: #fff; }
+.btn.info { background: #00838f; color: #fff; }
+.btn.warning { background: #f57c00; color: #fff; }
+
+/* ===== กล่องแสดงหนังสือ ตรงตามระเบียบ ===== */
+.preview-box {
+  border: 1px solid #ccc;
+  padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left);
+  margin: 20px auto;
+  background: #ffffff;
+  min-height: 950px;
+  position: relative;
+  font-size: var(--text-size);
+  line-height: var(--line-height);
+  white-space: pre-wrap;
+}
+
+/* ตราครุฑ */
+.preview-box .garuda {
+  position: absolute;
+  top: var(--margin-top);
+  left: var(--margin-left);
+  line-height: 1;
+}
+
+.preview-box .garuda img {
+  height: var(--garuda-height);
+  width: auto;
+  display: block;
+}
+
+/* ปรับขนาดสำหรับหนังสือภายใน */
+.preview-box.internal .garuda img {
+  height: var(--garuda-height-int);
+}
+
+/* ส่วนหัวหน่วยงาน */
+.preview-box .org-header {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 1em;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+/* ที่หนังสือ */
+.preview-box .doc-no {
+  text-align: left;
+  margin-bottom: 0.5em;
+}
+
+/* วันที่ */
+.preview-box .doc-date {
+  text-align: right;
+  margin-bottom: 1.5em;
+}
+
+/* ผู้ลงนาม */
+.preview-box .signature-block {
+  margin-top: 3em;
+  text-align: right;
+}
+
+.preview-box .signature-name {
+  display: inline-block;
+  text-align: center;
+  width: 280px;
+}
+
+/* รายการทะเบียน */
+#docList > div {
+  padding: 12px 0;
+  border-bottom: 1px solid #edf2f7;
+}
+
+/* ส่วน AI */
+#aiResult {
+  margin-top: 15px;
+  padding: 15px;
+  background: #f0fdf4;
+  border-radius: 8px;
+  border-left: 4px solid #2e7d32;
+}
+
+/* ===== พิมพ์ออกเป็นกระดาษ ===== */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    background: #ffffff;
+    padding: 0;
+  }
+  header, .card:not(:nth-child(3)) {
+    display: none;
+  }
+  .preview-box {
+    border: none;
+    margin: 0;
+    padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left);
+    min-height: auto;
+  }
 }
