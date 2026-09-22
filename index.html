@@ -3,59 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบเขียนหนังสือราชการ อบต.บก</title>
+  <title>ระบบสารบรรณ + ฐานข้อมูล อบต.บก</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>📄 ระบบเขียนหนังสือราชการ อบต.บก</h1>
-      <p class="note">ตามระเบียบสารบรรณ พ.ศ. ๒๕๔๗ | อ่านง่าย — พิมพ์เร็ว — ประหยัดเวลา</p>
+      <h1>📄 ระบบสารบรรณ + ฐานข้อมูลรายชื่อ</h1>
+      <p class="note">องค์การบริหารส่วนตำบลบก — เลือก-เพิ่ม-ลบ หน่วยงาน & ผู้ลงนาม</p>
     </header>
 
+    <!-- === จัดการฐานข้อมูล === -->
     <section class="card">
-      <h2>⚙️ ข้อมูลพื้นฐาน</h2>
-      <div class="form-row">
-        <label>ชื่อหน่วยงาน</label>
-        <input type="text" id="orgName" value="องค์การบริหารส่วนตำบลบก">
+      <h2>📂 จัดการฐานข้อมูล</h2>
+      
+      <!-- แท็บเลือก -->
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('dept')">หน่วยงาน</button>
+        <button class="tab-btn" onclick="switchTab('signer')">ผู้ลงนาม</button>
       </div>
-      <div class="form-row">
-        <label>ที่อยู่</label>
-        <input type="text" id="orgAddress" value="ตำบลบก อำเภอโนนคูณ จังหวัดศรีสะเกษ ๓๓๑๒๐">
+
+      <!-- === แท็บ: หน่วยงาน === -->
+      <div id="deptTab" class="tab-content">
+        <div class="form-row inline">
+          <input type="text" id="newDeptName" placeholder="ชื่อหน่วยงาน">
+          <button class="btn success" onclick="addDept()">+ เพิ่ม</button>
+        </div>
+        <div id="deptList" class="list-box"></div>
+        <small>💡 เลือกหลายรายการเพื่อสร้างหนังสือเวียน</small>
       </div>
-      <div class="form-row">
-        <label>ชื่อผู้ลงนาม</label>
-        <input type="text" id="signerName" value="นายไพจิตร สมหวัง">
+
+      <!-- === แท็บ: ผู้ลงนาม === -->
+      <div id="signerTab" class="tab-content" style="display:none;">
+        <div class="form-row inline">
+          <input type="text" id="newSignerName" placeholder="ชื่อ-สกุล">
+          <input type="text" id="newSignerPos" placeholder="ตำแหน่ง">
+          <button class="btn success" onclick="addSigner()">+ เพิ่ม</button>
+        </div>
+        <div id="signerList" class="list-box"></div>
       </div>
-      <div class="form-row">
-        <label>ตำแหน่ง</label>
-        <input type="text" id="signerPos" value="นายกองค์การบริหารส่วนตำบลบก">
-      </div>
-      <div class="form-row">
-        <label>🔑 Gemini API Key <small>(รับฟรีที่ aistudio.google.com)</small></label>
-        <input type="password" id="geminiKey" placeholder="ใส่คีย์ตรงนี้">
-      </div>
-      <button class="btn primary" onclick="saveSettings()">บันทึก</button>
     </section>
 
+    <!-- === เขียนหนังสือ === -->
     <section class="card">
       <h2>✍️ เขียนหนังสือ</h2>
+      
       <div class="form-row">
-        <label>ประเภท</label>
+        <label>ประเภทหนังสือ</label>
         <select id="docType" onchange="updatePreview()">
-          <option value="external" selected>หนังสือภายนอก</option>
+          <option value="external" selected>หนังสือภายนอก / หนังสือเวียน</option>
           <option value="internal">หนังสือภายใน</option>
           <option value="order">คำสั่ง</option>
           <option value="announce">ประกาศ</option>
         </select>
       </div>
+
+      <div class="form-row">
+        <label>ส่งถึงหน่วยงาน <small>(เลือกหลายรายการได้)</small></label>
+        <div id="selectedDepts" class="selected-box">
+          <em>เลือกหน่วยงานจากด้านบน</em>
+        </div>
+        <button class="btn info" onclick="clearDeptSelection()">ล้างการเลือก</button>
+      </div>
+
       <div class="form-row">
         <label>เรื่อง</label>
         <input type="text" id="docSubject" oninput="updatePreview()">
-      </div>
-      <div class="form-row">
-        <label>เรียน</label>
-        <input type="text" id="docTo" oninput="updatePreview()">
       </div>
       <div class="form-row">
         <label>อ้างถึง</label>
@@ -67,32 +80,27 @@
       </div>
       <div class="form-row">
         <label>เนื้อความ</label>
-        <textarea id="docBody" rows="8" placeholder="  พิมพ์ตรงนี้ ย่อหน้าเว้น ๒ ช่อง..." oninput="updatePreview()"></textarea>
+        <textarea id="docBody" rows="8" placeholder="  พิมพ์เนื้อความตรงนี้..." oninput="updatePreview()"></textarea>
+      </div>
+      <div class="form-row">
+        <label>ผู้ลงนาม</label>
+        <select id="selectedSigner" onchange="updatePreview()">
+          <option value="">-- เลือกผู้ลงนาม --</option>
+        </select>
       </div>
 
-      <div style="background:#eef2ff; padding:15px; border-radius:8px; margin:15px 0;">
-        <h3>🤖 ช่วยเขียนเร็วขึ้น</h3>
-        <div class="form-row">
-          <label>อัปโหลดภาพหนังสือต้นเรื่อง</label>
-          <input type="file" id="imgUpload" accept="image/*" onchange="previewImg()">
-        </div>
-        <button class="btn primary" onclick="analyzeWithGemini()">📖 อ่านจากภาพ & ร่าง</button>
-        <button class="btn success" onclick="rewriteByGemini()">✨ ปรับสำนวนให้ถูกระเบียบ</button>
+      <div class="btn-group">
+        <button class="btn primary" onclick="generateLetters()">📄 สร้างหนังสือตามรายชื่อ</button>
+        <button class="btn success" onclick="saveAllData()">💾 สำรองข้อมูล</button>
+        <button class="btn info" onclick="importData()">📂 นำเข้าข้อมูล</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="doImport(event)">
       </div>
-
-      <h3>📋 ตัวอย่าง</h3>
-      <div class="preview-box" id="previewArea"></div>
-
-      <button class="btn success" onclick="saveDoc()">💾 บันทึก</button>
-      <button class="btn secondary" onclick="window.print()">🖨️ พิมพ์</button>
-      <button class="btn secondary" onclick="exportFile()">📥 สำรอง</button>
-      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-      <button class="btn info" onclick="document.getElementById('importFile').click()">📂 นำเข้า</button>
     </section>
 
+    <!-- === ตัวอย่าง === -->
     <section class="card">
-      <h2>📑 ทะเบียน <span id="total">0</span> ฉบับ</h2>
-      <div id="docList"></div>
+      <h2>📋 ตัวอย่างหนังสือ</h2>
+      <div class="preview-box" id="previewArea"></div>
     </section>
   </div>
   <script src="js/app.js"></script>
